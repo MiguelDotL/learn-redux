@@ -55,9 +55,16 @@ console.log('Starting redux example');
 // var res = changeProp(startingValue);
 // console.log(startingValue);
 // console.log(res);
+var stateDefault = {
+    name: 'Anonymous',
+    movies: [],
+    hobbies: []
+}
 
+var nextMovieId = 1;
+var nextHobbyId = 1;
 
-var reducer = (state = {name: 'Anonymous'}, action) => {
+var reducer = (state = stateDefault, action) => {
   // state = state || {name: 'Anonymous'};
 
   switch(action.type) {
@@ -65,6 +72,39 @@ var reducer = (state = {name: 'Anonymous'}, action) => {
       return {
         ...state,
         name: action.name
+      };
+    case 'ADD_MOVIE':
+      return {
+        ...state,
+        movies: [
+          ...state.movies,
+          {
+            id: nextMovieId++,
+            movieTitle: action.movieTitle,
+            genre: action.genre
+          }
+        ]
+      };
+    case 'REMOVE_MOVIE':
+      return {
+        ...state,
+        movies: state.movies.filter((movie) => movie.id !== action.id)
+      };
+    case 'ADD_HOBBY':
+      return {
+        ...state,
+        hobbies: [
+          ...state.hobbies,
+          {
+            id: nextHobbyId++,
+            hobby: action.hobby
+          }
+        ]
+      };
+    case 'REMOVE_HOBBY':
+      return {
+        ...state,
+        hobbies: state.hobbies.filter((hobby) => hobby.id !== action.id)
       };
       default:
         return state;
@@ -81,6 +121,8 @@ var unsibscribe = store.subscribe(() => {
 
   console.log('Name is ', state.name);
   document.getElementById('app').innerHTML = state.name;
+
+  console.log('New State ', store.getState());
 });
 // unsibscribe();
 
@@ -94,8 +136,39 @@ store.dispatch({
   name: 'Miguel',
 });
 
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'doing stuff'
+});
+
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'doing more stuff'
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE',
+  movieTitle: 'Pulp Fiction',
+  genre: 'Action'
+});
 
 store.dispatch({
   type: 'CHANGE_NAME',
   name: 'Joseph',
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE',
+  movieTitle: 'Krampus',
+  genre: 'Thriller'
+});
+
+store.dispatch({
+  type: 'REMOVE_HOBBY',
+  id: 2
+});
+
+store.dispatch({
+  type: 'REMOVE_MOVIE',
+  id: 1
 });
