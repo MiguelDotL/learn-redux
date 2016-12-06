@@ -1,0 +1,22 @@
+@import 'base/variables';
+// -------- Foundation --------
+@import 'base/foundation-settings';
+@import 'foundation';
+
+@include foundation-everything;
+
+
+// -------- Components --------
+@import 'components/nav';
+
+
+// ---------------- Main Styles ----------------
+p {
+  color: $top-bar-color;
+}
+
+
+.page-title {
+  margin: 2rem 0;
+  text-align: center;
+}

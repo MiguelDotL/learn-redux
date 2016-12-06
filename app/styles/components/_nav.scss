@@ -1,0 +1,39 @@
+// ---------------- Main Styles ----------------
+
+
+// ---------------- Foundation Overrides ----------------
+// ---------------- Nav.jsx ----------------
+.top-bar {
+  background: $top-bar-color;
+  padding: 1rem;
+
+  ul {
+    background: none;
+    color: $top-bar-text;
+  }
+}
+
+.menu {
+
+  .logo {
+    margin: 0 1rem 0 0;
+    width: 1.6rem;
+  }
+
+  .menu-text {
+    a {
+      // border-bottom: .2rem solid lighten($top-bar-color, 40%);
+      display: inline;
+      padding: 0;
+    }
+  }
+}
+
+.active-link {
+  border-bottom: .2rem solid $link-underline;
+  font-weight: bold;;
+}
+
+.top-bar-right {
+  padding: .2rem 0 0;
+}
