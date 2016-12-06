@@ -2,39 +2,49 @@ var redux = require('redux');
 
 console.log('initializing application...');
 
-var stateDefault = {  searchText: '',
-                      showCompleted: false,
-                      todos: []
+var stateDefault = {
+    searchText: '',
+    showCompleted: false,
+    todos: []
 };
 
-var reducer = (state = stateDefault, action) => {
-  return state;
-
-}
 
 var reducer = (state = stateDefault, action) => {
-  // state = state || {name: 'Anonymous'};
-
   switch(action.type) {
     case 'CHANGE_SEARCH_TEXT':
       return {
         ...state,
         searchText: action.searchText
       };
-      default:
-        return state;
+    default:
+      return state;
   }
-}
+};
 
+var store = redux.createStore(reducer, redux.compose(
+  window.devToolsExtension ? window.devToolsExtension() : f => f
+));
 
-var store = redux.createStore(reducer);
+store.subscribe(() => {
+  var state = store.getState();
 
-var currentState = store.getState();
-console.log('currentState', currentState);
+  console.log('searchText is ', state.name );
+  document.getElementById('app').innerHTML = state.searchText;
+});
+
+console.log('currentState', store.getState());
 
 store.dispatch({
   type: 'CHANGE_SEARCH_TEXT',
-  searchText: 'work',
+  searchText: 'work'
 });
 
-console.log('searchText should be \'work\'', store.getState());
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  searchText: 'play'
+});
+
+store.dispatch({
+  type: 'CHANGE_SEARCH_TEXT',
+  searchText: 'sleep'
+});
