@@ -1,1 +1,1 @@
-#  React JSX Boilerplate
+#Learn Redux Functionalities
