@@ -2,6 +2,67 @@ var redux = require('redux');
 
 console.log('Starting redux example');
 
+// // PureFunctions
+// // 01 // input arguments do not get mutated
+// // 02 // only local vars, no outside vars
+// // 03 // AVOID  promises and async calls, like db calls or http requests
+//
+//
+// // pureFunction
+// function add(a, b) {
+//   return a + b;
+// }
+//
+// // notPure
+// var a = 3
+//
+// function sum(b) {
+//   return a + b;
+// }
+//
+// // alsoNotPure
+// var result;
+// function add(a, b) {
+//   result = a + b;
+//   return result;
+// }
+//
+// // suchNotPure
+// function add(a, b) {
+//   return a + b + new Date().getSeconds();
+// }
+//
+// // pureFunctions cannot mutate arguments
+//
+//
+// function changeProp(obj) {
+//   // // PassingByReference
+//   // obj.name = 'Jen';
+//   // return obj
+//
+//   // PassingByValue
+//    return {
+//      ...obj,
+//      name: 'Jen'
+//    }
+// }
+//
+// var startingValue = {
+//   name: 'Miguel',
+//   age: 27
+// }
+//
+// var res = changeProp(startingValue);
+// console.log(startingValue);
+// console.log(res);
+var stateDefault = {
+    name: 'Anonymous',
+    movies: [],
+    hobbies: []
+}
+
+var nextMovieId = 1;
+var nextHobbyId = 1;
 
 var oldReducer = (state = stateDefault, action) => {
   // state = state || {name: 'Anonymous'};
@@ -50,7 +111,7 @@ var oldReducer = (state = stateDefault, action) => {
   }
 };
 
-// -------- nameReducer and action generators --------
+
 var nameReducer = (state = "Anonymous", action) => {
   switch(action.type){
     case 'CHANGE_NAME':
@@ -60,47 +121,9 @@ var nameReducer = (state = "Anonymous", action) => {
     default:
     return state;
   }
+
 }
 
-var changeName = (name) => {
-  return {
-    type: 'CHANGE_NAME',
-    name: name
-  }
-}
-
-// -------- hobbiesReducer and action generators --------
-var nextHobbyId = 1;
-var hobbiesReducer = (state = [], action) => {
-  switch(action.type) {
-    case 'ADD_HOBBY':
-    return [
-      ...state,
-      {
-        id: nextHobbyId++,
-        hobby: action.hobby
-      }
-    ];
-    case 'REMOVE_HOBBY':
-    return state.filter((hobby) => hobby.id !== action.id);
-    default:
-    return state;
-  }
-}
-
-var addHobby = (hobby) => {
-  return {  type: 'ADD_HOBBY',
-            hobby }
-}
-
-var removeHobby = (id) => {
-  return {  type: 'REMOVE_HOBBY',
-            id  }
-}
-
-
-// -------- moviesReducer and action generators --------
-var nextMovieId = 1;
 var moviesReducer = (state = [], action) => {
   switch(action.type) {
     case 'ADD_MOVIE':
@@ -119,17 +142,22 @@ var moviesReducer = (state = [], action) => {
   }
 }
 
-var addMovie = (movieTitle, genre) => {
-  return {  type: 'ADD_MOVIE',
-            movieTitle,
-            genre }
+var hobbiesReducer = (state = [], action) => {
+  switch(action.type) {
+    case 'ADD_HOBBY':
+      return [
+        ...state,
+        {
+          id: nextHobbyId++,
+          hobby: action.hobby
+        }
+      ];
+    case 'REMOVE_HOBBY':
+      return state.filter((hobby) => hobby.id !== action.id);
+      default:
+        return state;
+  }
 }
-
-var removeMovie = (id) => {
-  return {  type: 'REMOVE_MOVIE',
-            id  }
-}
-
 
 var reducer = redux.combineReducers({
   name: nameReducer,
@@ -157,22 +185,44 @@ var currentState = store.getState();
 console.log('currentState', currentState);
 
 
-store.dispatch(changeName('Miguel'));
-store.dispatch(addHobby('doing stuff'));
-store.dispatch(addHobby('doing more stuff'));
-store.dispatch(addMovie('Pulp Fiction','Action'));
-store.dispatch(changeName('Joseph'));
-store.dispatch(addMovie('Krampus','Thriller'));
-store.dispatch(removeHobby(2));
-store.dispatch(removeMovie(1));
+store.dispatch({
+  type: 'CHANGE_NAME',
+  name: 'Miguel',
+});
 
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'doing stuff'
+});
 
-// store.dispatch({
-//   type: 'REMOVE_HOBBY',
-//   id: 2
-// });
-//
-// store.dispatch({
-//   type: 'REMOVE_MOVIE',
-//   id: 1
-// });
+store.dispatch({
+  type: 'ADD_HOBBY',
+  hobby: 'doing more stuff'
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE',
+  movieTitle: 'Pulp Fiction',
+  genre: 'Action'
+});
+
+store.dispatch({
+  type: 'CHANGE_NAME',
+  name: 'Joseph',
+});
+
+store.dispatch({
+  type: 'ADD_MOVIE',
+  movieTitle: 'Krampus',
+  genre: 'Thriller'
+});
+
+store.dispatch({
+  type: 'REMOVE_HOBBY',
+  id: 2
+});
+
+store.dispatch({
+  type: 'REMOVE_MOVIE',
+  id: 1
+});
